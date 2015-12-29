@@ -1,25 +1,24 @@
-#activeDutymapList
+#activeMaps
 {
 
 }
 
-div.map
+.map
 {
     width: 267;
     height: 150px;
     position: relative;
-    left: 0;
-    bottom:0px;
+    
 }
 
-div.row
+.row
 {
   position: absolute;
   bottom:0px;
   left:50%;
 
 }
-div.map_name
+.map_name
 {
   text-align: center;
   position:relative;
