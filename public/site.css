@@ -1,3 +1,12 @@
+#my_uuid{
+  display: none
+}
+
+#position{
+  display: none
+}
+
+
 #activeMaps
 {
 
@@ -5,10 +14,10 @@
 
 .map
 {
-    width: 267;
-    height: 150px;
+    width: 250px;
+    height: 141px;
     position: relative;
-    
+    float:left;
 }
 
 .row

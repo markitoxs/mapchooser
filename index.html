@@ -9,10 +9,11 @@
 
 
       <div id="rectangle" style="background-color:red">YOUR TURN</div>
-
+      <div id="my_uuid"> Not connected!  </div>
+      <div id="position"> ERROR! </div>
 
       <!-- ORDERING IS IMPORTANT since document might not be ready.-->
-      <div id="activeMaps">
+      <div id="activeMaps" width=100%>
         <!-- ACTIVE DUTY -->
         <div id="dust11" class="map" style="background: url('dust2.png')"> <div class="row"> <div class="map_name">dust11</div></div></div>
         <div id="cobblestone" class="map" style="background: url('cobblestone.png')"> <div class="row"> <div class="map_name">cobblestone</div></div></div>
@@ -40,9 +41,7 @@
 
 
 
-      You are: <div id="my_uuid"> Not connected!  </div>
-      <br/>
-      In command: <div id="position"> ERROR! </div>
+
       <!-- ORDERING IS IMPORTANT -->
 
       <script>
@@ -61,12 +60,10 @@
 
       // function to grey out a specified div
       function greyDiv(map) {
-        //grey out
         selector = "#" + map
         $(selector).css('background-color', 'grey');
         $(selector).css('opacity', '0.4');
         $(selector).unbind();
-        //$(selector).css('cursor', 'none');
       }
 
       var firstClient = 0 ;

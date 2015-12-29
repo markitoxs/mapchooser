@@ -34,12 +34,15 @@ io.on('connection',function(socket) {
   allClients.push(socket)
 
   socket.on('add user', function (username) {
-    console.log("User " + username + " connected!")
+
     if (addedUser) return;
 
     // we store the username in the socket session for this client
     socket.username = username;
     ++numUsers;
+
+    console.log("Users online: "+numUsers + " " + socket.username + " joined from " + socket.request.connection.remoteAddress)
+
     addedUser = true;
     socket.emit('login', {
       numUsers: numUsers
@@ -63,6 +66,7 @@ io.on('connection',function(socket) {
         username: socket.username,
         numUsers: numUsers
       });
+      console.log("Users online: "+numUsers + " " + socket.username + " left!")
     }
 
     // Remove the entry from within the general queue:
@@ -98,6 +102,7 @@ io.on('connection',function(socket) {
     allClients.push(allClients[0]);
     allClients.shift();
     io.sockets.emit('order_changed', allClients[0].username );
+    console.log("waiting for user: "+ allClients[0].username )
     io.sockets.emit('map_selected', data.map)
     mapCache[data.map] =  true;
   });
