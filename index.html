@@ -1,11 +1,32 @@
 
 <html lang="en">
     <head>
-
+      <link href="site.css" rel="stylesheet">
     </head>
     <body>
       <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
       <script src="/socket.io/socket.io.js"></script>
+
+      <!-- ORDERING IS IMPORTANT since document might not be ready.-->
+      <div id="mapList">
+
+        <div id="dust" class="map"> <img src="dust2.jpg" width=300px> dust11</div>
+
+        <div id="mirage" class="map"><img src="mirage.jpg" width=300px>  mirage </div>
+
+        <div id="cache" class="map"> <img src="cache.png" width=300px> cache </div>
+
+        <div id="inferno" class="map"> <img src="inferno.jpg" width=300px> inferno </div>
+
+      </div>
+
+      <div id="rectangle" style="width:50px; height:50px; background-color:red"></div>
+
+
+      You are: <div id="my_uuid"> Not connected!  </div>
+      <br/>
+      In command: <div id="position"> ERROR! </div>
+      <!-- ORDERING IS IMPORTANT -->
 
       <script>
 
@@ -25,6 +46,7 @@
         //grey out
         selector = "#" + map
         $(selector).css('background-color', 'grey');
+        $(selector).css('opacity', '0.4');
         $(selector).unbind();
         //$(selector).css('cursor', 'none');
       }
@@ -33,6 +55,7 @@
       var total_maps = 4;
       var firstClient = 0 ;
       var inCharge = false;
+      var mapHash = {}
 
       //Initiate connection to server
       var host = window.location.origin
@@ -109,18 +132,5 @@
 
 
       </script>
-
-      <div id="dust" style="width:50px; height:50px; background-color:ff6666"> dust </div>
-
-      <div id="mirage" style="width:50px; height:50px; background-color: #6666ff"> mirage </div>
-
-      <div id="cache" style="width:50px; height:50px; background-color: #99ff66"> cache </div>
-
-      <div id="inferno" style="width:50px; height:50px; background-color: #ffb84d"> inferno </div>
-
-      <div id="rectangle" style="width:50px; height:50px; background-color:red"></div>
-      You are: <div id="my_uuid"> Not connected!  </div>
-      <br/>
-      In command: <div id="position"> ERROR! </div>
     </body>
 </html>

@@ -1,5 +1,9 @@
 // app.js
 var app = require('express')();
+var express = require('express');
+app.use(express.static('public'));
+
+//
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
@@ -12,6 +16,10 @@ http.listen(4200, function(){
 
 var online = 0 ;
 var numUsers = 0;
+
+//holds up whatever maps are already selected
+
+var mapCache = {}
 
 var allClients = [];
 
@@ -90,5 +98,6 @@ io.on('connection',function(socket) {
     allClients.shift();
     io.sockets.emit('order_changed', allClients[0].username );
     io.sockets.emit('map_selected', data.map)
+    mapCache[data.map] =  true;
   });
 });
