@@ -8,15 +8,29 @@
       <script src="/socket.io/socket.io.js"></script>
 
       <!-- ORDERING IS IMPORTANT since document might not be ready.-->
-      <div id="mapList">
-
-        <div id="dust11" class="map" style="background: url('dust2.jpg')"> <div class="row"> <div class="map_name">dust11</div></div></div>
-
-        <div id="mirage" class="map" style="background: url('mirage.jpg')"> <div class="row"> <div class="map_name">mirage</div></div></div>
-
+      <div id="activeDutymapList">
+        <!-- ACTIVE DUTY -->
+        <div id="dust11" class="map" style="background: url('dust2.png')"> <div class="row"> <div class="map_name">dust11</div></div></div>
+        <div id="cobblestone" class="map" style="background: url('cobblestone.png')"> <div class="row"> <div class="map_name">cobblestone</div></div></div>
+        <div id="inferno" class="map" style="background: url('inferno.png')"> <div class="row"> <div class="map_name">inferno</div></div></div>
         <div id="cache" class="map" style="background: url('cache.png')"> <div class="row"> <div class="map_name">cache</div></div></div>
+        <div id="mirage" class="map" style="background: url('mirage.png')"> <div class="row"> <div class="map_name">mirage</div></div></div>
+        <div id="overpass" class="map" style="background: url('overpass.png')"> <div class="row"> <div class="map_name">overpass</div></div></div>
+        <div id="train" class="map" style="background: url('train.png')"> <div class="row"> <div class="map_name">train</div></div></div>
+        <!-- ACTIVE DUTY -->
+      </div>
 
-        <div id="inferno" class="map" style="background: url('inferno.jpg')"> <div class="row"> <div class="map_name">inferno</div></div></div>
+      <div id="reservesmapList">
+        <!-- RESERVES -->
+        <div id="nuke" class="map" style="background: url('nuke.png')"> <div class="row"> <div class="map_name">nuke</div></div></div>
+        <div id="assault" class="map" style="background: url('assault.png')"> <div class="row"> <div class="map_name">assault</div></div></div>
+        <div id="dust" class="map" style="background: url('dust.png')"> <div class="row"> <div class="map_name">dust</div></div></div>
+        <div id="vertigo" class="map" style="background: url('vertigo.png')"> <div class="row"> <div class="map_name">vertigo</div></div></div>
+        <div id="militia" class="map" style="background: url('militia.png')"> <div class="row"> <div class="map_name">militia</div></div></div>
+        <div id="italy" class="map" style="background: url('italy.png')"> <div class="row"> <div class="map_name">italy</div></div></div>
+        <div id="office" class="map" style="background: url('office.png')"> <div class="row"> <div class="map_name">office</div></div></div>
+        <div id="aztec" class="map" style="background: url('aztec.png')"> <div class="row"> <div class="map_name">aztec</div></div></div>
+        <!-- RESERVES -->
 
       </div>
 
@@ -30,6 +44,7 @@
 
       <script>
 
+      var total_maps = 15
       // Create random uuid
       function guid() {
         function s4() {
@@ -90,43 +105,23 @@
         console.log("Map "+ data + " was removed");
         greyDiv(data);
         --total_maps;
+        console.log ("maps left:"+total_maps)
         if ( total_maps == 1 ) { inCharge = false; }
       });
 
-
       // Define buttons
-      $('#dust11').click(function() {
-        if (inCharge) {
-          socket.emit('make_selection' , { uuid : $("#my_uuid").text(), map : "dust11"} );
-        } else {
-          console.log ("Tried to click without inCharge");
-        }
-      });
+      $('.map').each(function(index) {
+        $(this).click(function() {
+          if (inCharge){
+            //console.log("clicking on:"+$(this).attr('id'))
+            socket.emit('make_selection', {uuid: $("#my_uuid").text(), map: $(this).attr('id')})
+          }
+          else {
+            console.log ("Tried to click without inCharge");
+          }
 
-      $('#mirage').click(function() {
-        if (inCharge) {
-          socket.emit('make_selection' , { uuid : $("#my_uuid").text(), map : "mirage"});
-        }else {
-          console.log ("Tried to click without inCharge");
-        }
+        });
       });
-
-      $('#cache').click(function() {
-        if (inCharge) {
-          socket.emit('make_selection' , { uuid : $("#my_uuid").text(), map : "cache"});
-        }else {
-          console.log ("Tried to click without inCharge");
-        }
-      });
-
-      $('#inferno').click(function() {
-        if (inCharge) {
-          socket.emit('make_selection' ,  { uuid : $("#my_uuid").text(), map : "inferno"});
-        }else {
-          console.log ("Tried to click without inCharge");
-        }
-      });
-
 
       </script>
     </body>
