@@ -10,13 +10,13 @@
       <!-- ORDERING IS IMPORTANT since document might not be ready.-->
       <div id="mapList">
 
-        <div id="dust" class="map"> <img src="dust2.jpg" width=300px> dust11</div>
+        <div id="dust11" class="map" style="background: url('dust2.jpg')"> <div class="row"> <div class="map_name">dust11</div></div></div>
 
-        <div id="mirage" class="map"><img src="mirage.jpg" width=300px>  mirage </div>
+        <div id="mirage" class="map" style="background: url('mirage.jpg')"> <div class="row"> <div class="map_name">mirage</div></div></div>
 
-        <div id="cache" class="map"> <img src="cache.png" width=300px> cache </div>
+        <div id="cache" class="map" style="background: url('cache.png')"> <div class="row"> <div class="map_name">cache</div></div></div>
 
-        <div id="inferno" class="map"> <img src="inferno.jpg" width=300px> inferno </div>
+        <div id="inferno" class="map" style="background: url('inferno.jpg')"> <div class="row"> <div class="map_name">inferno</div></div></div>
 
       </div>
 
@@ -51,11 +51,8 @@
         //$(selector).css('cursor', 'none');
       }
 
-      var current_position = 0 ;
-      var total_maps = 4;
       var firstClient = 0 ;
       var inCharge = false;
-      var mapHash = {}
 
       //Initiate connection to server
       var host = window.location.origin
@@ -98,9 +95,9 @@
 
 
       // Define buttons
-      $('#dust').click(function() {
+      $('#dust11').click(function() {
         if (inCharge) {
-          socket.emit('make_selection' , { uuid : $("#my_uuid").text(), map : "dust"} );
+          socket.emit('make_selection' , { uuid : $("#my_uuid").text(), map : "dust11"} );
         } else {
           console.log ("Tried to click without inCharge");
         }
