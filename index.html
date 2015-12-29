@@ -13,7 +13,6 @@
 
       <div id="inferno" style="width:50px;cursor: pointer; height:50px; background-color: #ffb84d"> inferno </div>
 
-        <button id="button" type="button" >NEXT</button>
 
         <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
         <script src="/socket.io/socket.io.js"></script>
@@ -36,14 +35,6 @@
         var firstClient = 0 ;
         var inCharge = false;
 
-        // Handle go button
-        $("#button").click(function() {
-          // Only emit event if we are in charge
-          if (inCharge ) {
-            socket.emit('make_selection' , uuid);
-          }
-        });
-
         //Initiate connection to server
         var host = window.location.origin
         var socket = io.connect(host);
@@ -51,11 +42,11 @@
         socket.on('connect', function(data) {
           uuid = guid();
           socket.emit('add user', uuid);
-          $("#my_uuid").text(uuid)
+          $("#my_uuid").text(uuid);
         });
 
         socket.on('order_changed',function(data){
-          console.log(data + ' gets to choose')
+          console.log(data + ' gets to choose');
 
           if ( uuid == data ) {
             $('#rectangle').css('background-color', 'green');
@@ -64,7 +55,7 @@
             $('#rectangle').css('background-color', 'red');
             inCharge = false;
           }
-          $("#position").text(data)
+          $("#position").text(data);
         });
 
         // Whenever the server emits 'user joined', log it in the chat body
@@ -79,20 +70,37 @@
 
         // Define buttons
         $('#dust').click(function() {
-          socket.emit('make_selection' , uuid);
+          if (inCharge) {
+            socket.emit('make_selection' , { uuid : $("#my_uuid").text(), map : "dust"} );
+          } else {
+            console.log ("Tried to click without inCharge");
+          }
         });
 
         $('#mirage').click(function() {
-          socket.emit('make_selection' , uuid);
+          if (inCharge) {
+            socket.emit('make_selection' , { uuid : $("#my_uuid").text(), map : "mirage"});
+          }else {
+            console.log ("Tried to click without inCharge");
+          }
         });
 
         $('#cache').click(function() {
-          socket.emit('make_selection' , uuid);
+          if (inCharge) {
+            socket.emit('make_selection' , { uuid : $("#my_uuid").text(), map : "cache"});
+          }else {
+            console.log ("Tried to click without inCharge");
+          }
         });
 
         $('#inferno').click(function() {
-          socket.emit('make_selection' , uuid);
+          if (inCharge) {
+            socket.emit('make_selection' ,  { uuid : $("#my_uuid").text(), map : "inferno"});
+          }else {
+            console.log ("Tried to click without inCharge");
+          }
         });
+
 
         </script>
 

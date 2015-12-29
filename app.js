@@ -82,9 +82,9 @@ io.on('connection',function(socket) {
   });
 
   socket.on('make_selection',function(data) {
-    user = data;
-    selection = data.map;
-    console.log("User " + user + " clicked NEXT");
+
+    console.log("User " + data.uuid + " clicked:" + data.map);
+
     //I can only click next if I am in charge.
     allClients.push(allClients[0]);
     allClients.shift();
