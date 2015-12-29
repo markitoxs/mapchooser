@@ -11,6 +11,8 @@
 
         <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
         <script src="/socket.io/socket.io.js"></script>
+
+
         <script>
 
 
@@ -39,7 +41,8 @@
         });
 
         //Initiate connection to server
-        var socket = io.connect('http://localhost:4200');
+        var host = window.location.origin
+        var socket = io.connect(host);
 
         socket.on('connect', function(data) {
           uuid = guid();

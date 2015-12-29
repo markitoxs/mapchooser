@@ -1,22 +1,24 @@
 // app.js
-var express = require('express');
-var app = express();
-var server = require('http').createServer(app);
-var io = require('socket.io')(server);
+var app = require('express')();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+
+http.listen(4200, function(){
+  console.log('listening on *:4200');
+});
+
+
+
 
 var online = 0 ;
 var numUsers = 0;
 
 var allClients = [];
 
-
-
-//#app.use(express.static(__dirname + '/bower_components'));
 app.get('/', function(req, res,next) {
     res.sendFile(__dirname + '/index.html');
 });
 
-server.listen(4200);
 
 io.on('connection',function(socket) {
   var addedUser = false;
@@ -58,14 +60,25 @@ io.on('connection',function(socket) {
     // Select the proper socket
     connected = false;
     while (connected == false)
-    if (allClients[0].connected) {
-      //noop
-      connected = true;
+    try {
+      if (allClients[0].connected) {
+        //noop
+        connected = true;
+      }
+      else {
+        allClients.shift();
+        try {
+          io.sockets.emit('order_changed', allClients[0].username );
+        }
+        catch(err) {
+          console.log("Error happened: "+err.message)
+        }
+      }
+    } catch(err) {
+      connected = true
+      console.log("No clients connected!")
     }
-    else {
-      allClients.shift();
-      io.sockets.emit('order_changed', allClients[0].username );
-    }
+
   });
 
   socket.on('make_selection',function(data) {
