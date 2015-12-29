@@ -4,17 +4,21 @@
 
     </head>
     <body>
-        <div id="future"></div>
+
+      <div id="dust" style="width:50px; cursor: pointer; height:50px; background-color:ff6666"> dust </div>
+
+      <div id="mirage" style="width:50px; cursor: pointer; height:50px; background-color: #6666ff"> mirage </div>
+
+      <div id="cache" style="width:50px; cursor: pointer; height:50px; background-color: #99ff66"> cache </div>
+
+      <div id="inferno" style="width:50px;cursor: pointer; height:50px; background-color: #ffb84d"> inferno </div>
 
         <button id="button" type="button" >NEXT</button>
-
 
         <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
         <script src="/socket.io/socket.io.js"></script>
 
-
         <script>
-
 
         // Create random uuid
         function guid() {
@@ -72,12 +76,30 @@
           console.log(data.username + ' left');
         });
 
+
+        // Define buttons
+        $('#dust').click(function() {
+          socket.emit('make_selection' , uuid);
+        });
+
+        $('#mirage').click(function() {
+          socket.emit('make_selection' , uuid);
+        });
+
+        $('#cache').click(function() {
+          socket.emit('make_selection' , uuid);
+        });
+
+        $('#inferno').click(function() {
+          socket.emit('make_selection' , uuid);
+        });
+
         </script>
 
 
         <div id="rectangle" style="width:50px; height:50px; background-color:red"></div>
-        You are number <div id="my_uuid"> foo </div>
+        You are number <div id="my_uuid"> Not connected!  </div>
         <br/>
-        In command: <div id="position"> X </div>
+        In command: <div id="position"> ERROR! </div>
     </body>
 </html>
