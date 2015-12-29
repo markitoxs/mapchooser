@@ -7,6 +7,10 @@
       <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
       <script src="/socket.io/socket.io.js"></script>
 
+
+      <div id="rectangle" style="background-color:red">YOUR TURN</div>
+
+
       <!-- ORDERING IS IMPORTANT since document might not be ready.-->
       <div id="activeDutymapList">
         <!-- ACTIVE DUTY -->
@@ -34,7 +38,6 @@
 
       </div>
 
-      <div id="rectangle" style="width:50px; height:50px; background-color:red"></div>
 
 
       You are: <div id="my_uuid"> Not connected!  </div>
@@ -84,9 +87,12 @@
 
         if ( uuid == data ) {
           $('#rectangle').css('background-color', 'green');
+          $('#rectangle').text('YOUR TURN');
           inCharge = true;
         } else {
           $('#rectangle').css('background-color', 'red');
+          $('#rectangle').text('PLEASE WAIT');
+
           inCharge = false;
         }
         $("#position").text(data);

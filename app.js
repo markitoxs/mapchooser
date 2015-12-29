@@ -34,6 +34,7 @@ io.on('connection',function(socket) {
   allClients.push(socket)
 
   socket.on('add user', function (username) {
+    console.log("User " + username + " connected!")
     if (addedUser) return;
 
     // we store the username in the socket session for this client
