@@ -89,5 +89,6 @@ io.on('connection',function(socket) {
     allClients.push(allClients[0]);
     allClients.shift();
     io.sockets.emit('order_changed', allClients[0].username );
+    io.sockets.emit('map_selected', data.map)
   });
 });

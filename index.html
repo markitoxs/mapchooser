@@ -4,110 +4,123 @@
 
     </head>
     <body>
+      <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+      <script src="/socket.io/socket.io.js"></script>
 
-      <div id="dust" style="width:50px; cursor: pointer; height:50px; background-color:ff6666"> dust </div>
+      <script>
 
-      <div id="mirage" style="width:50px; cursor: pointer; height:50px; background-color: #6666ff"> mirage </div>
-
-      <div id="cache" style="width:50px; cursor: pointer; height:50px; background-color: #99ff66"> cache </div>
-
-      <div id="inferno" style="width:50px;cursor: pointer; height:50px; background-color: #ffb84d"> inferno </div>
-
-
-        <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-        <script src="/socket.io/socket.io.js"></script>
-
-        <script>
-
-        // Create random uuid
-        function guid() {
-          function s4() {
-            return Math.floor((1 + Math.random()) * 0x10000)
-            .toString(16)
-            .substring(1);
-          }
-          return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-          s4() + '-' + s4() + s4() + s4();
+      // Create random uuid
+      function guid() {
+        function s4() {
+          return Math.floor((1 + Math.random()) * 0x10000)
+          .toString(16)
+          .substring(1);
         }
+        return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+        s4() + '-' + s4() + s4() + s4();
+      }
+
+      // function to grey out a specified div
+      function greyDiv(map) {
+        //grey out
+        selector = "#" + map
+        $(selector).css('background-color', 'grey');
+        $(selector).unbind();
+        //$(selector).css('cursor', 'none');
+      }
+
+      var current_position = 0 ;
+      var total_maps = 4;
+      var firstClient = 0 ;
+      var inCharge = false;
+
+      //Initiate connection to server
+      var host = window.location.origin
+      var socket = io.connect(host);
+
+      socket.on('connect', function(data) {
+        uuid = guid();
+        socket.emit('add user', uuid);
+        $("#my_uuid").text(uuid);
+      });
+
+      socket.on('order_changed',function(data){
+        console.log(data + ' gets to choose');
+
+        if ( uuid == data ) {
+          $('#rectangle').css('background-color', 'green');
+          inCharge = true;
+        } else {
+          $('#rectangle').css('background-color', 'red');
+          inCharge = false;
+        }
+        $("#position").text(data);
+      });
+
+      // Whenever the server emits 'user joined', log it in the chat body
+      socket.on('user joined', function (data) {
+        console.log(data.username  + ' joined');
+      });
+
+      socket.on('user left', function (data) {
+        console.log(data.username + ' left');
+      });
+
+      socket.on('map_selected', function (data) {
+        console.log("Map "+ data + " was removed");
+        greyDiv(data);
+        --total_maps;
+        if ( total_maps == 1 ) { inCharge = false; }
+      });
 
 
-        var current_position = 0 ;
-        var firstClient = 0 ;
-        var inCharge = false;
+      // Define buttons
+      $('#dust').click(function() {
+        if (inCharge) {
+          socket.emit('make_selection' , { uuid : $("#my_uuid").text(), map : "dust"} );
+        } else {
+          console.log ("Tried to click without inCharge");
+        }
+      });
 
-        //Initiate connection to server
-        var host = window.location.origin
-        var socket = io.connect(host);
+      $('#mirage').click(function() {
+        if (inCharge) {
+          socket.emit('make_selection' , { uuid : $("#my_uuid").text(), map : "mirage"});
+        }else {
+          console.log ("Tried to click without inCharge");
+        }
+      });
 
-        socket.on('connect', function(data) {
-          uuid = guid();
-          socket.emit('add user', uuid);
-          $("#my_uuid").text(uuid);
-        });
+      $('#cache').click(function() {
+        if (inCharge) {
+          socket.emit('make_selection' , { uuid : $("#my_uuid").text(), map : "cache"});
+        }else {
+          console.log ("Tried to click without inCharge");
+        }
+      });
 
-        socket.on('order_changed',function(data){
-          console.log(data + ' gets to choose');
-
-          if ( uuid == data ) {
-            $('#rectangle').css('background-color', 'green');
-            inCharge = true;
-          } else {
-            $('#rectangle').css('background-color', 'red');
-            inCharge = false;
-          }
-          $("#position").text(data);
-        });
-
-        // Whenever the server emits 'user joined', log it in the chat body
-        socket.on('user joined', function (data) {
-          console.log(data.username  + ' joined');
-        });
-
-        socket.on('user left', function (data) {
-          console.log(data.username + ' left');
-        });
+      $('#inferno').click(function() {
+        if (inCharge) {
+          socket.emit('make_selection' ,  { uuid : $("#my_uuid").text(), map : "inferno"});
+        }else {
+          console.log ("Tried to click without inCharge");
+        }
+      });
 
 
-        // Define buttons
-        $('#dust').click(function() {
-          if (inCharge) {
-            socket.emit('make_selection' , { uuid : $("#my_uuid").text(), map : "dust"} );
-          } else {
-            console.log ("Tried to click without inCharge");
-          }
-        });
+      </script>
 
-        $('#mirage').click(function() {
-          if (inCharge) {
-            socket.emit('make_selection' , { uuid : $("#my_uuid").text(), map : "mirage"});
-          }else {
-            console.log ("Tried to click without inCharge");
-          }
-        });
+      <div id="dust" style="width:50px; height:50px; background-color:ff6666"> dust </div>
 
-        $('#cache').click(function() {
-          if (inCharge) {
-            socket.emit('make_selection' , { uuid : $("#my_uuid").text(), map : "cache"});
-          }else {
-            console.log ("Tried to click without inCharge");
-          }
-        });
+      <div id="mirage" style="width:50px; height:50px; background-color: #6666ff"> mirage </div>
 
-        $('#inferno').click(function() {
-          if (inCharge) {
-            socket.emit('make_selection' ,  { uuid : $("#my_uuid").text(), map : "inferno"});
-          }else {
-            console.log ("Tried to click without inCharge");
-          }
-        });
+      <div id="cache" style="width:50px; height:50px; background-color: #99ff66"> cache </div>
 
+      <div id="inferno" style="width:50px; height:50px; background-color: #ffb84d"> inferno </div>
 
-        </script>
-
-
-        <div id="rectangle" style="width:50px; height:50px; background-color:red"></div>
-        You are number <div id="my_uuid"> Not connected!  </div>
-        <br/>
-        In command: <div id="position"> ERROR! </div>
+      <div id="rectangle" style="width:50px; height:50px; background-color:red"></div>
+      You are: <div id="my_uuid"> Not connected!  </div>
+      <br/>
+      In command: <div id="position"> ERROR! </div>
     </body>
 </html>
