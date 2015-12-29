@@ -1,0 +1,80 @@
+
+<html lang="en">
+    <head>
+
+    </head>
+    <body>
+        <div id="future"></div>
+
+        <button id="button" type="button" >NEXT</button>
+
+
+        <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+
+
+        // Create random uuid
+        function guid() {
+          function s4() {
+            return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+          }
+          return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+          s4() + '-' + s4() + s4() + s4();
+        }
+
+
+        var current_position = 0 ;
+        var firstClient = 0 ;
+        var inCharge = false;
+
+        // Handle go button
+        $("#button").click(function() {
+          // Only emit event if we are in charge
+          if (inCharge ) {
+            socket.emit('make_selection' , uuid);
+          }
+        });
+
+        //Initiate connection to server
+        var socket = io.connect('http://localhost:4200');
+
+        socket.on('connect', function(data) {
+          uuid = guid();
+          socket.emit('add user', uuid);
+          $("#my_uuid").text(uuid)
+        });
+
+        socket.on('order_changed',function(data){
+          console.log(data + ' gets to choose')
+
+          if ( uuid == data ) {
+            $('#rectangle').css('background-color', 'green');
+            inCharge = true;
+          } else {
+            $('#rectangle').css('background-color', 'red');
+            inCharge = false;
+          }
+          $("#position").text(data)
+        });
+
+        // Whenever the server emits 'user joined', log it in the chat body
+        socket.on('user joined', function (data) {
+          console.log(data.username  + ' joined');
+        });
+
+        socket.on('user left', function (data) {
+          console.log(data.username + ' left');
+        });
+
+        </script>
+
+
+        <div id="rectangle" style="width:50px; height:50px; background-color:red"></div>
+        You are number <div id="my_uuid"> foo </div>
+        <br/>
+        In command: <div id="position"> X </div>
+    </body>
+</html>
