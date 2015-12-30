@@ -1,3 +1,21 @@
+[contenteditable]:hover:after {
+  content: 'Click to change name';
+  color: #000;
+}
+
+[contenteditable]:hover, [contenteditable]:focus {
+  background: #FFFFFF;
+}
+
+[contenteditable]:focus {
+  content: '';
+  background: #000000;
+}
+
+[contenteditable]:focus:after {
+  content: '';
+}
+
 .name {
   position: fixed;
   width:100%;

@@ -134,6 +134,7 @@ io.on('connection',function(socket) {
   });
 
   socket.on('name change',function(data){
+    socket.name = data
     console.log("Name changed to: " + data );
   });
 });
