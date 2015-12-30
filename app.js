@@ -19,11 +19,17 @@ var numUsers = 0;
 
 //holds up whatever maps are already selected
 
-var mapCache = {}
+var mapCache = [];
 
 var allClients = [];
 
 app.get('/', function(req, res,next) {
+    res.sendFile(__dirname + '/index.html');
+});
+
+app.get('/reset', function(req, res,next) {
+    mapCache = [];
+    allClients = [];
     res.sendFile(__dirname + '/index.html');
 });
 
@@ -52,6 +58,8 @@ io.on('connection',function(socket) {
       username: socket.username,
       numUsers: numUsers
     });
+
+    socket.emit('update cache', mapCache);
 
     io.sockets.emit('order_changed', allClients[0].username );
 
@@ -89,21 +97,43 @@ io.on('connection',function(socket) {
       }
     } catch(err) {
       connected = true
-      console.log("No clients connected!")
+      console.log("No clients connected! (Clearing cache)")
+      // Empty cache
+      mapCache = []
     }
-
   });
 
   socket.on('make_selection',function(data) {
 
     console.log("User " + data.uuid + " clicked:" + data.map);
 
-    //I can only click next if I am in charge.
-    allClients.push(allClients[0]);
-    allClients.shift();
+    connected = false;
+
+    while (connected == false){
+      // This request can only come from client in charge
+      // Move it to the back of the queue
+      allClients.push(allClients[0]);
+      allClients.shift();
+
+      //verify that next client is still connected
+      if (allClients[0].connected)  {
+        connected = true;
+      }
+      else {
+        console.log("User: " + allClients[0].username + "is no longer connected");
+        //delete first element then
+        allClients.unshift();
+      }
+    }
+
     io.sockets.emit('order_changed', allClients[0].username );
     console.log("waiting for user: "+ allClients[0].username )
     io.sockets.emit('map_selected', data.map)
-    mapCache[data.map] =  true;
+
+    mapCache.push(data.map);
+  });
+
+  socket.on('name change',function(data){
+    console.log("Name changed to: " + data );
   });
 });

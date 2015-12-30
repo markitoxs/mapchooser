@@ -1,3 +1,15 @@
+.name {
+  position: fixed;
+  width:100%;
+  height: 30x;
+  bottom:0;
+  z-index:100;
+  text-align: center;
+  font-weight: bold;
+  color: white;
+  background-color: black
+}
+
 #my_uuid{
   display: none
 }
