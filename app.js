@@ -20,7 +20,7 @@ var numUsers = 0;
 //holds up whatever maps are already selected
 
 var mapCache = [];
-
+// This object should be an array of arrays, first object being the socket, second being the name
 var allClients = [];
 
 app.get('/', function(req, res,next) {
@@ -37,7 +37,7 @@ app.get('/reset', function(req, res,next) {
 io.on('connection',function(socket) {
   var addedUser = false;
 
-  allClients.push(socket)
+  allClients.push([socket,""])
 
   socket.on('add user', function (username) {
 
@@ -61,7 +61,7 @@ io.on('connection',function(socket) {
 
     socket.emit('update cache', mapCache);
 
-    io.sockets.emit('order_changed', allClients[0].username );
+    io.sockets.emit('order_changed', allClients[0][0].username );
 
   });
 
@@ -82,14 +82,14 @@ io.on('connection',function(socket) {
     connected = false;
     while (connected == false)
     try {
-      if (allClients[0].connected) {
+      if (allClients[0][0].connected) {
         //noop
         connected = true;
       }
       else {
         allClients.shift();
         try {
-          io.sockets.emit('order_changed', allClients[0].username );
+          io.sockets.emit('order_changed', allClients[0][0].username );
         }
         catch(err) {
           console.log("Error happened: "+err.message)
@@ -116,25 +116,26 @@ io.on('connection',function(socket) {
       allClients.shift();
 
       //verify that next client is still connected
-      if (allClients[0].connected)  {
+      if (allClients[0][0].connected)  {
         connected = true;
       }
       else {
-        console.log("User: " + allClients[0].username + "is no longer connected");
+        console.log("User: " + allClients[0][0].username + "is no longer connected");
         //delete first element then
         allClients.unshift();
       }
     }
 
-    io.sockets.emit('order_changed', allClients[0].username );
-    console.log("waiting for user: "+ allClients[0].username )
+    io.sockets.emit('order_changed', allClients[0][0].username );
+    console.log("waiting for user: "+ allClients[0][0].username )
     io.sockets.emit('map_selected', data.map)
 
     mapCache.push(data.map);
   });
 
   socket.on('name change',function(data){
-    socket.name = data
-    console.log("Name changed to: " + data );
+    //Need to store in the correct place
+    socket.name = data.name
+    console.log("Name changed to: " + data.name + "  (uuid: "+data.uuid+") ");
   });
 });

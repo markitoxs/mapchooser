@@ -50,7 +50,11 @@ document.addEventListener('keydown', function (event) {
       if ( data.myname == myName ) {
           //do nothing
       } else {
-        socket.emit('name change', data.myname);
+        var name_details = {
+          name : data.myname,
+          uuid : $("#my_uuid").text()
+        }
+        socket.emit('name change', name_details);
       }
 
       el.blur();
@@ -95,7 +99,6 @@ socket.on('user joined', function (data) {
 socket.on('user left', function (data) {
   console.log(data.username + ' left');
 });
-
 
 socket.on('update cache', function (data) {
   mapCache = data;
